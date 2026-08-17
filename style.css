@@ -1,0 +1,3749 @@
+/* =========================================================
+   SCIVENTURE - MAIN STYLESHEET
+   One CSS file for the entire game
+   ========================================================= */
+
+
+/* =========================================================
+   1. GLOBAL
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+
+    /* Removes the gray flash Android/iOS browsers show on tap. */
+    -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+
+    /* Prevent double-tap-to-zoom, pinch-zoom drift, pull-to-refresh,
+       and the rubber-band scroll bounce on touch devices, so the
+       game feels like a real app instead of a webpage. */
+    touch-action: none;
+    overscroll-behavior: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #071b12;
+    color: white;
+}
+
+
+/* =========================================================
+   2. SCREEN SYSTEM
+   ========================================================= */
+
+.screen {
+    position: absolute;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    display: none;
+
+    overflow: hidden;
+}
+
+.screen.active {
+    display: flex;
+}
+
+/* Every screen background image now comes from this custom
+   property, set in script.js (SCREEN_BACKGROUNDS). Change the
+   picture there - this stays untouched. */
+.screen {
+    --screen-bg: none;
+}
+
+
+/* =========================================================
+   3. LOADING SCREEN
+   ========================================================= */
+
+#loadingScreen {
+    justify-content: center;
+    align-items: center;
+
+    background-image:
+        linear-gradient(
+            rgba(5, 25, 15, 0.55),
+            rgba(5, 25, 15, 0.75)
+        ),
+        var(--screen-bg);
+
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+#loadingScreen .loading-content {
+    width: min(500px, 85%);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    text-align: center;
+}
+
+#loadingScreen .loading-logo {
+    width: min(320px, 70vw);
+    height: auto;
+
+    margin-bottom: 25px;
+
+    object-fit: contain;
+}
+
+#loadingScreen h2 {
+    margin-bottom: 15px;
+
+    font-size: 28px;
+    letter-spacing: 2px;
+}
+
+#loadingScreen .loading-bar {
+    width: 100%;
+    height: 25px;
+
+    overflow: hidden;
+
+    border: 3px solid white;
+    border-radius: 20px;
+
+    background: rgba(0, 0, 0, 0.4);
+}
+
+#loadingScreen #loadingProgress {
+    width: 0%;
+    height: 100%;
+
+    border-radius: 20px;
+
+    background: #72d66b;
+
+    transition: width 0.15s linear;
+}
+
+#loadingScreen #loadingPercent {
+    margin-top: 10px;
+
+    font-size: 18px;
+    font-weight: bold;
+}
+
+
+/* =========================================================
+   4. MAIN MENU
+   ========================================================= */
+
+#menuScreen {
+    /* Was justify-content/align-items: center, which combined with
+       the .screen overflow:hidden clipped any buttons that didn't
+       fit the viewport height (no way to reach them). Centering is
+       now done on .menu-content via margin:auto below, which still
+       centers when everything fits but lets the screen scroll
+       instead of clipping when it doesn't. */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+
+    background-image:
+        linear-gradient(
+            rgba(4, 30, 15, 0.35),
+            rgba(4, 20, 10, 0.65)
+        ),
+        var(--screen-bg);
+
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+#menuScreen .menu-content {
+    width: min(500px, 90%);
+    flex-shrink: 0;
+
+    margin: auto;
+    padding: 30px 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    text-align: center;
+}
+
+#menuScreen .menu-logo {
+    width: min(350px, 75vw);
+    height: auto;
+
+    margin-bottom: 30px;
+
+    object-fit: contain;
+
+    animation: menuLogoFloat 3.2s ease-in-out infinite;
+
+    filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.35));
+}
+
+@keyframes menuLogoFloat {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-14px);
+    }
+}
+
+#menuScreen .menu-buttons {
+    width: min(560px, 94%);
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 16px;
+}
+
+/* Two grouped panels side by side - CHARACTERS/PROFILE/
+   LEADERBOARD on the left, SHOP/INVENTORY/SETTINGS/EXIT on
+   the right - each its own rounded translucent card. */
+#menuScreen .menu-buttons-columns {
+    display: flex;
+
+    gap: 16px;
+
+    width: 100%;
+}
+
+#menuScreen .menu-buttons-col {
+    flex: 1;
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 12px;
+
+    padding: 14px;
+
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    border-radius: 20px;
+
+    background: rgba(6, 10, 45, 0.45);
+
+    backdrop-filter: blur(2px);
+}
+
+#menuScreen .menu-buttons button {
+    width: 100%;
+    padding: 15px 20px;
+
+    border: 3px solid white;
+    border-radius: 14px;
+
+    background: rgba(8, 13, 60, 0.9);
+    color: white;
+
+    font-size: 20px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
+}
+
+#menuScreen .menu-buttons-col button {
+    padding: 13px 10px;
+
+    font-size: 15px;
+    white-space: nowrap;
+}
+
+#menuScreen .menu-play-btn {
+    font-size: 22px;
+    padding: 17px 20px;
+}
+
+#menuScreen .menu-buttons button:hover {
+    transform: scale(1.05);
+
+    background: rgba(0, 38, 253, 0.95);
+}
+
+#menuScreen .menu-buttons button:active {
+    transform: scale(0.97);
+}
+
+#menuScreen .menu-buttons .prizeMenuBtn {
+    background: rgba(8, 13, 60, 0.9);
+    color: white;
+    
+
+
+}
+
+#menuScreen .menu-buttons .prizeMenuBtn:hover {
+    background: linear-gradient(
+        135deg,
+        rgba(0, 38, 253, 0.95)
+    );
+}
+
+@keyframes prizeBtnGlow {
+    0%, 100% {
+        box-shadow: 0 0 10px rgba(255, 200, 60, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 22px rgba(255, 210, 90, 0.9);
+    }
+}
+
+
+/* =========================================================
+   5. CUSTOMIZE SCREEN
+   ========================================================= */
+
+#customizeScreen {
+    justify-content: center;
+    align-items: center;
+
+    background-image:
+        linear-gradient(
+            rgba(4, 35, 20, 0.65),
+            rgba(4, 20, 12, 0.85)
+        ),
+        var(--screen-bg);
+
+    background-position: center;
+    background-size: cover;
+}
+
+#customizeScreen .customize-content {
+    width: min(600px, 90%);
+
+    padding: 30px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    text-align: center;
+
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: 25px;
+
+    background: rgba(0, 30, 15, 0.75);
+    backdrop-filter: blur(8px);
+}
+
+#customizeScreen h1 {
+    margin-bottom: 20px;
+
+    font-size: clamp(28px, 5vw, 45px);
+}
+
+#customizeScreen #characterPreview {
+    width: 180px;
+    height: 180px;
+
+    object-fit: contain;
+
+    margin-bottom: 15px;
+
+    transition: filter 0.25s ease;
+}
+
+#customizeScreen p {
+    margin-bottom: 20px;
+
+    font-size: 17px;
+}
+
+#customizeScreen .color-options {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    justify-content: center;
+
+    gap: 12px;
+
+    margin-bottom: 25px;
+}
+
+#customizeScreen .color-btn {
+    width: 45px;
+    height: 45px;
+
+    border: 3px solid white;
+    border-radius: 50%;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+#customizeScreen .color-btn:hover {
+    transform: scale(1.15);
+
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+}
+
+
+/* =========================================================
+   5.5 CHARACTER SELECT GRID
+   ========================================================= */
+
+#customizeScreen .customize-content {
+    max-height: 90vh;
+    overflow-y: auto;
+    touch-action: pan-y;
+}
+
+#customizeScreen .section-title {
+    margin-top: 10px;
+    margin-bottom: 6px;
+
+    font-size: clamp(18px, 3.5vw, 24px);
+}
+
+#customizeScreen .character-hint {
+    margin-bottom: 16px;
+
+    font-size: 13px;
+    opacity: 0.8;
+}
+
+#customizeScreen .character-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+
+    gap: 14px;
+
+    width: 100%;
+
+    margin-bottom: 10px;
+}
+
+#customizeScreen .character-card {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 10px 8px;
+
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    border-radius: 16px;
+
+    background: rgba(0, 20, 10, 0.55);
+
+    cursor: pointer;
+
+    transition:
+        transform 0.15s ease,
+        border-color 0.15s ease,
+        background 0.15s ease;
+}
+
+#customizeScreen .character-card:hover {
+    transform: translateY(-3px);
+
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+#customizeScreen .character-card.selected {
+    border-color: #ffd23a;
+
+    background: rgba(255, 210, 58, 0.18);
+
+    box-shadow: 0 0 14px rgba(255, 210, 58, 0.5);
+}
+
+#customizeScreen .character-card.locked {
+    cursor: not-allowed;
+
+    opacity: 0.55;
+}
+
+#customizeScreen .character-card img {
+    width: 70px;
+    height: 70px;
+
+    object-fit: contain;
+
+    margin-bottom: 6px;
+}
+
+#customizeScreen .character-card.locked img {
+    filter: grayscale(1) brightness(0.5);
+}
+
+#customizeScreen .character-card .char-name {
+    font-size: 13px;
+    font-weight: bold;
+}
+
+#customizeScreen .character-card .char-perk {
+    margin-top: 3px;
+
+    font-size: 10.5px;
+    line-height: 1.3;
+
+    opacity: 0.85;
+}
+
+#customizeScreen .character-card .char-lock {
+    margin-top: 4px;
+
+    font-size: 10px;
+
+    color: #ffd23a;
+}
+
+#customizeScreen .character-card .lock-badge {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+
+    font-size: 16px;
+}
+
+
+/* =========================================================
+   5.6 PROFILE SCREEN
+   ========================================================= */
+
+#profileScreen {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+
+    background-image:
+        linear-gradient(
+            rgba(4, 35, 20, 0.65),
+            rgba(4, 20, 12, 0.85)
+        ),
+        var(--screen-bg);
+
+    background-position: center;
+    background-size: cover;
+}
+
+#profileScreen .profile-content {
+    width: min(420px, 90%);
+    flex-shrink: 0;
+
+    margin: auto;
+    padding: 30px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    text-align: center;
+
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: 25px;
+
+    background: rgba(0, 30, 15, 0.75);
+    backdrop-filter: blur(8px);
+}
+
+#profileScreen h1 {
+    margin-bottom: 20px;
+
+    font-size: clamp(28px, 5vw, 45px);
+}
+
+#profileScreen .section-title {
+    margin-top: 18px;
+    margin-bottom: 10px;
+
+    font-size: clamp(18px, 3.5vw, 24px);
+}
+
+#profileScreen .profile-name {
+    font-size: clamp(20px, 4vw, 28px);
+    font-weight: bold;
+
+    color: #ffd23a;
+
+    margin-bottom: 18px;
+}
+
+#profileScreen .profile-score-label {
+    font-size: 15px;
+    opacity: 0.85;
+
+    margin-bottom: 4px;
+}
+
+#profileScreen .profile-score {
+    font-size: clamp(26px, 5vw, 38px);
+    font-weight: bold;
+
+    margin-bottom: 6px;
+}
+
+#profileScreen .profile-character-img {
+    width: 140px;
+    height: 140px;
+
+    object-fit: contain;
+
+    margin-top: 8px;
+    margin-bottom: 10px;
+}
+
+#profileScreen .profile-character-name {
+    font-size: 17px;
+    font-weight: bold;
+
+    margin-bottom: 10px;
+}
+
+
+/* =========================================================
+   7. BACK BUTTONS
+   ========================================================= */
+
+#customizeScreen .backBtn,
+#profileScreen .backBtn,
+#inventoryScreen .backBtn,
+#mapScreen .backBtn {
+    padding: 12px 22px;
+
+    border: 2px solid white;
+    border-radius: 12px;
+
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
+}
+
+#customizeScreen .backBtn:hover,
+#profileScreen .backBtn:hover,
+#inventoryScreen .backBtn:hover,
+#mapScreen .backBtn:hover {
+    transform: scale(1.05);
+
+    background: rgba(255, 255, 255, 0.15);
+}
+
+
+/* =========================================================
+   8. WORLD MAP
+   ========================================================= */
+
+#mapScreen {
+    justify-content: center;
+    align-items: center;
+
+    background-image:
+        linear-gradient(
+            rgba(5, 35, 20, 0.15),
+            rgba(5, 35, 20, 0.25)
+        ),
+        var(--screen-bg);
+
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+#mapScreen .map-content {
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+}
+
+#mapScreen h1 {
+    position: absolute;
+
+    top: 25px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    z-index: 10;
+
+    padding: 10px 25px;
+
+    border-radius: 15px;
+
+    background: rgba(0, 30, 15, 0.75);
+
+    font-size: clamp(28px, 5vw, 50px);
+
+    white-space: nowrap;
+}
+
+#mapScreen #mapCharacter {
+    position: absolute;
+
+    width: 90px;
+    height: 90px;
+
+    object-fit: contain;
+
+    left: 10%;
+    bottom: 10%;
+
+    z-index: 5;
+}
+
+#mapScreen .level-btn {
+    position: absolute;
+
+    z-index: 10;
+
+    padding: 12px 18px;
+
+    border: 3px solid white;
+    border-radius: 15px;
+
+    color: white;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transform: translate(-50%, -50%);
+
+    transition:
+        transform 0.2s ease,
+        filter 0.2s ease;
+}
+
+#mapScreen .level-btn:hover {
+    transform: translate(-50%, -50%) scale(1.08);
+
+    filter: brightness(1.15);
+}
+
+#mapScreen .level1 {
+    left: 23%;
+    top: 73%;
+
+    background: #287a3c;
+}
+
+#mapScreen .level2 {
+    left: 32%;
+    top: 52%;
+
+    background: #247b91;
+}
+
+#mapScreen .level3 {
+    left: 51%;
+    top: 49%;
+
+    background: #7352a8;
+}
+
+#mapScreen .level4 {
+    left: 69%;
+    top: 40%;
+
+    background: #a64b28;
+}
+
+#mapScreen .level5 {
+    left: 53%;
+    top: 27%;
+
+    background: #70468e;
+}
+
+#mapScreen .level-btn.locked {
+    opacity: 0.65;
+
+    cursor: not-allowed;
+}
+
+#mapScreen .level-btn span {
+    display: inline-flex;
+
+    width: 28px;
+    height: 28px;
+
+    justify-content: center;
+    align-items: center;
+
+    margin-right: 5px;
+
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.2);
+}
+
+#mapScreen #mapBackBtn {
+    position: absolute;
+
+    left: 25px;
+    bottom: 25px;
+
+    z-index: 20;
+}
+
+
+/* =========================================================
+   9. GAME SCREEN
+   ========================================================= */
+
+#gameScreen {
+    background: #111;
+
+    justify-content: center;
+    align-items: center;
+}
+
+#gameScreen .game-content {
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+}
+
+#gameScreen .game-hud {
+    position: absolute;
+
+    top: 15px;
+    left: 15px;
+    right: 15px;
+
+    z-index: 20;
+
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 10px 15px;
+
+    border: 2px solid white;
+    border-radius: 12px;
+
+    background: rgba(0, 0, 0, 0.55);
+
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#gameScreen #gameCanvas {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    background: #163b22;
+}
+
+
+/* =========================================================
+   9.5 MOBILE TOUCH CONTROLS
+
+   Hidden by default (desktop keeps using the keyboard). Shown
+   only on touch devices via the (pointer: coarse) media query
+   further down. See bindHoldButton()/tryJump() in script.js.
+   ========================================================= */
+
+#touchControls {
+    display: none;
+
+    position: absolute;
+
+    left: 0;
+    right: 0;
+    bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+
+    z-index: 30;
+
+    justify-content: space-between;
+    align-items: flex-end;
+
+    padding-left: calc(18px + env(safe-area-inset-left, 0px));
+    padding-right: calc(18px + env(safe-area-inset-right, 0px));
+
+    pointer-events: none;
+}
+
+#touchMoveGroup,
+#touchActionGroup {
+    display: flex;
+
+    gap: 14px;
+
+    pointer-events: auto;
+}
+
+#touchControls button {
+    width: 64px;
+    height: 64px;
+
+    border: 2px solid rgba(255, 255, 255, 0.85);
+    border-radius: 50%;
+
+    background: rgba(0, 0, 0, 0.45);
+    color: white;
+
+    font-size: 24px;
+    font-weight: bold;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+
+    opacity: 0.85;
+}
+
+#touchControls button:active {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(0.94);
+}
+
+#touchJumpBtn {
+    width: 78px;
+    height: 78px;
+
+    font-size: 15px;
+
+    background: rgba(60, 150, 90, 0.55);
+}
+
+#touchAttackBtn {
+    width: 64px;
+    height: 64px;
+
+    font-size: 26px;
+
+    background: rgba(190, 60, 60, 0.55);
+}
+
+
+/* =========================================================
+   10. MOBILE / SMALL SCREENS
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    #menuScreen .menu-logo {
+        width: 250px;
+    }
+
+    #menuScreen .menu-buttons {
+        width: 92%;
+    }
+
+    #menuScreen .menu-buttons button {
+        font-size: 17px;
+        padding: 13px;
+    }
+
+    #menuScreen .menu-buttons-columns {
+        flex-direction: column;
+    }
+
+    #menuScreen .menu-buttons-col button {
+        font-size: 16px;
+        padding: 12px;
+        white-space: normal;
+    }
+
+    #customizeScreen .customize-content {
+        padding: 20px;
+    }
+
+    #customizeScreen #characterPreview {
+        width: 140px;
+        height: 140px;
+    }
+
+    #mapScreen .level-btn {
+        padding: 8px 10px;
+
+        font-size: 11px;
+    }
+
+    #mapScreen #mapCharacter {
+        width: 65px;
+        height: 65px;
+    }
+
+    #gameScreen .game-hud {
+        top: 8px;
+        left: 8px;
+        right: 8px;
+
+        padding: 6px 8px;
+
+        gap: 6px;
+
+        font-size: 13px;
+
+        flex-wrap: wrap;
+    }
+
+    #gameScreen #attackBtn,
+    #gameScreen #leaveGameBtn,
+    #gameScreen .useItemBtn {
+        padding: 6px 10px;
+
+        font-size: 13px;
+    }
+
+    /* SHOP - had no mobile rules at all before, so its 42px
+       heading / 45px icons / fixed paddings were overflowing
+       and looking oversized on phones. */
+    .shop-container {
+        padding: 16px;
+    }
+
+    .shop-container h1 {
+        font-size: clamp(24px, 7vw, 32px);
+        margin-bottom: 6px;
+    }
+
+    .shop-coins {
+        font-size: 17px;
+        margin-bottom: 16px;
+    }
+
+    .shop-item {
+        gap: 12px;
+        padding: 12px;
+        margin: 10px 0;
+    }
+
+    .item-icon {
+        width: 44px;
+        height: 44px;
+
+        font-size: 24px;
+    }
+
+    .item-info h2 {
+        font-size: 16px;
+    }
+
+    .item-info p {
+        font-size: 13px;
+    }
+
+    .price {
+        font-size: 13px;
+    }
+
+    .buyBtn,
+    .sellBtn {
+        min-width: 0;
+
+        padding: 9px 14px;
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    /* PROFILE / CUSTOMIZE character art - large fixed pixel
+       sizes that didn't shrink with everything else. */
+    #profileScreen .profile-character-img {
+        width: 100px;
+        height: 100px;
+    }
+
+    #customizeScreen #characterPreview {
+        width: 120px;
+        height: 120px;
+    }
+
+    #touchControls button {
+        width: 54px;
+        height: 54px;
+        font-size: 20px;
+    }
+
+    #touchJumpBtn {
+        width: 66px;
+        height: 66px;
+        font-size: 13px;
+    }
+
+    #touchAttackBtn {
+        width: 54px;
+        height: 54px;
+        font-size: 22px;
+    }
+
+}
+
+/* Very small phones (SE-class widths and narrower) - one more
+   pass down so nothing crowds or clips at the smallest common
+   screen sizes. */
+@media (max-width: 380px) {
+
+    #menuScreen .menu-logo {
+        width: 190px;
+    }
+
+    #menuScreen .menu-buttons button {
+        font-size: 15px;
+        padding: 11px;
+    }
+
+    #menuScreen .menu-buttons-col button {
+        font-size: 13px;
+        padding: 10px;
+    }
+
+    .shop-container h1 {
+        font-size: 22px;
+    }
+
+    .item-icon {
+        font-size: 20px;
+        width: 36px;
+        height: 36px;
+    }
+
+    .shop-item {
+        flex-wrap: wrap;
+    }
+
+    .buyBtn,
+    .sellBtn {
+        width: 100%;
+    }
+
+}
+
+/* Short viewports (small phones, landscape phones, or just a
+   short browser window) - tighten spacing so the full button
+   list fits without needing to scroll. */
+@media (max-height: 700px) {
+
+    #menuScreen .menu-logo {
+        width: min(180px, 45vw);
+        margin-bottom: 12px;
+    }
+
+    #menuScreen .menu-player-line {
+        margin-bottom: 10px;
+    }
+
+    #menuScreen .menu-buttons {
+        gap: 8px;
+    }
+
+    #menuScreen .menu-buttons button {
+        padding: 10px 16px;
+
+        font-size: 16px;
+    }
+
+    #menuScreen .menu-buttons-columns {
+        gap: 8px;
+    }
+
+    #menuScreen .menu-buttons-col {
+        gap: 6px;
+        padding: 8px;
+    }
+
+    #menuScreen .menu-buttons-col button {
+        padding: 8px 10px;
+
+        font-size: 13px;
+    }
+
+}
+
+@media (max-height: 520px) {
+
+    #menuScreen .menu-content {
+        padding: 16px 0;
+    }
+
+    #menuScreen .menu-logo {
+        width: min(130px, 35vw);
+        margin-bottom: 8px;
+    }
+
+    #menuScreen .menu-buttons button {
+        padding: 8px 14px;
+
+        font-size: 14px;
+    }
+
+}
+
+/* =========================================================
+   10.5 TOUCH DEVICES (phones/tablets - anything without a
+   mouse-quality pointer). Shows the on-screen controls and
+   gives the game area a little breathing room so the HUD and
+   the new controls don't crowd the playfield.
+   ========================================================= */
+
+@media (hover: none) and (pointer: coarse) {
+
+    #touchControls {
+        display: flex;
+    }
+
+    /* Attack now lives next to the JUMP button in the bottom-
+       right touch controls (see #touchAttackBtn) instead of the
+       top HUD bar - avoids making the player's thumb travel all
+       the way up the screen mid-fight. Desktop/mouse players
+       still get the HUD button since they don't have the
+       on-screen D-pad at all. */
+    #gameScreen #attackBtn {
+        display: none;
+    }
+
+}
+
+/* Zoom the gameplay view out a bit on mobile/touch devices. Rather
+   than shifting the camera up (which was tried and reverted),
+   this scales #levelStage's own layout box up by 25% and then
+   visually scales it back down to fit the same on-screen area -
+   since script.js reads stage.clientWidth/clientHeight fresh every
+   frame for its camera math, it automatically treats the bigger
+   (pre-scale) box as the real viewport, so ~25% more of the level
+   (world width AND height) fits on screen without touching any
+   camera logic. Desktop is untouched. */
+
+/* Real (physically-rotated) landscape phones. The max-width:600px
+   rules above only fire in portrait - once the phone is actually
+   turned sideways the CSS width is 700-950px, so those rules never
+   applied here and the map buttons stayed full desktop size,
+   overlapping each other on the narrow band of height available.
+   Keyed off pointer:coarse + short height so it only ever touches
+   touch devices with a shallow viewport, not desktop windows. */
+@media (hover: none) and (pointer: coarse) and (max-height: 500px) {
+
+    #mapScreen h1 {
+        top: 10px;
+
+        padding: 6px 16px;
+
+        font-size: clamp(16px, 4vw, 24px);
+    }
+
+    #mapScreen .level-btn {
+        padding: 5px 9px;
+
+        border-width: 2px;
+        border-radius: 10px;
+
+        font-size: 10px;
+    }
+
+    #mapScreen .level-btn span {
+        width: 16px;
+        height: 16px;
+
+        margin-right: 3px;
+    }
+
+    #mapScreen #mapCharacter {
+        width: 42px;
+        height: 42px;
+    }
+
+    #mapScreen .backBtn {
+        padding: 8px 14px;
+
+        font-size: 13px;
+    }
+
+    /* Same problem as the map buttons above: the logo, heading,
+       bar, and percent text are all sized/stacked for a tall
+       viewport. On a real landscape phone (~380-420px of height)
+       that stack is taller than the screen, so the bottom - the
+       bar and percent - got clipped by the screen's overflow:hidden.
+       Shrinking the stack (logo scales via width, height:auto)
+       brings the whole thing back inside the frame. */
+    #loadingScreen .loading-logo {
+        width: min(140px, 26vw);
+
+        margin-bottom: 8px;
+    }
+
+    #loadingScreen h2 {
+        margin-bottom: 8px;
+
+        font-size: 15px;
+    }
+
+    #loadingScreen .loading-bar {
+        height: 14px;
+
+        border-width: 2px;
+    }
+
+    #loadingScreen #loadingPercent {
+        margin-top: 6px;
+
+        font-size: 13px;
+    }
+
+    /* Shop / Inventory rows scroll rather than clip, but on a
+       short landscape phone they were still needlessly large -
+       tightening them means less scrolling to see the whole
+       list, and keeps BUY/SELL buttons a comfortable tap size
+       instead of towering over the row. */
+    .shop-container {
+        padding: 14px;
+    }
+
+    .shop-container h1 {
+        font-size: clamp(18px, 5vw, 24px);
+        margin-bottom: 4px;
+    }
+
+    .shop-coins {
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+
+    .shop-item {
+        gap: 10px;
+
+        padding: 10px 12px;
+        margin: 8px 0;
+    }
+
+    .item-icon {
+        width: 38px;
+        height: 38px;
+
+        font-size: 20px;
+    }
+
+    .item-info h2 {
+        font-size: 14px;
+    }
+
+    .item-info p {
+        margin: 2px 0;
+        font-size: 11px;
+    }
+
+    .price {
+        font-size: 11px;
+    }
+
+    .buyBtn,
+    .sellBtn {
+        min-width: 0;
+
+        padding: 7px 12px;
+        font-size: 11px;
+    }
+
+    /* GAME HUD / TOUCH CONTROLS - a real (physically-rotated)
+       landscape phone is often only ~360-420px tall, so the
+       desktop-sized HUD bar (20px font, 10-15px padding on
+       every item) can run wider than the screen. Shrinking it
+       and letting it wrap keeps every stat readable without
+       spilling off the sides, same idea as the shop/map rules
+       above. */
+    #gameScreen .game-hud {
+        top: 8px;
+        left: 8px;
+        right: 8px;
+
+        padding: 5px 10px;
+
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: center;
+
+        font-size: 13px;
+    }
+
+    #gameScreen #attackBtn,
+    #gameScreen #leaveGameBtn,
+    #gameScreen .useItemBtn {
+        padding: 5px 10px;
+
+        font-size: 13px;
+    }
+
+    #touchControls button {
+        width: 50px;
+        height: 50px;
+
+        font-size: 18px;
+    }
+
+    #touchJumpBtn {
+        width: 60px;
+        height: 60px;
+
+        font-size: 12px;
+    }
+
+    #touchAttackBtn {
+        width: 48px;
+        height: 48px;
+
+        font-size: 18px;
+    }
+
+}
+
+/* =========================================================
+   10.6 LANDSCAPE-ONLY GAMEPLAY ON MOBILE
+
+   The level view is built for a wide (landscape) frame and
+   doesn't work squeezed into a tall portrait screen.
+
+   This used to force the gameplay screen into landscape with a
+   CSS "rotate(90deg)" transform on #gameScreen itself. The
+   trick is that rotating the box also rotates its own top/left/
+   right/bottom coordinate space, so anything positioned with
+   "top" inside it actually renders along the screen's physical
+   RIGHT edge, and anything positioned with "bottom" renders
+   along the physical LEFT edge (the transform swaps which
+   physical edge each side maps to). The HUD (position: top) and
+   the touch controls (position: bottom) were never updated for
+   that swap, so instead of a bar across the top and controls
+   across the bottom, they rendered as two cramped, overlapping
+   vertical strips down the screen's right and left edges - the
+   broken layout this replaces.
+
+   Rather than fight that transform, we simply ask the player to
+   turn their phone and show a "rotate your device" prompt over
+   the gameplay screen until they do. Once the phone is
+   physically landscape, #gameScreen uses its normal desktop-
+   style layout with no transform involved, which is already
+   correct (this is what phones show once turned sideways).
+
+   Scoped to #gameScreen only - menus, map, shop, etc. stay in
+   normal portrait layout, and the loading screen already has
+   its own compact portrait sizing (see the max-width:600px
+   block above), so it doesn't need to force landscape at all.
+   ========================================================= */
+
+@media screen and (max-width: 900px) and (orientation: portrait) {
+
+    #gameScreen.active ~ #rotateDeviceOverlay {
+        display: flex;
+    }
+
+}
+
+#rotateDeviceOverlay {
+    display: none;
+
+    position: fixed;
+    inset: 0;
+
+    z-index: 9999;
+
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+
+    padding: 24px;
+    text-align: center;
+
+    background: #071b12;
+    color: white;
+}
+
+#rotateDeviceOverlay .rotateIcon {
+    font-size: 52px;
+
+    animation: rotateDeviceHint 1.6s ease-in-out infinite;
+}
+
+#rotateDeviceOverlay h2 {
+    font-size: 19px;
+}
+
+#rotateDeviceOverlay p {
+    max-width: 300px;
+
+    font-size: 13px;
+    line-height: 1.4;
+    opacity: 0.8;
+}
+
+@keyframes rotateDeviceHint {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(-90deg); }
+}
+
+/* =========================================================
+   MOTION MEADOW GAME
+   ========================================================= */
+
+/* =========================================================
+   MOTION MEADOW GAME
+   ========================================================= */
+
+#gameScreen #levelStage {
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+
+    transition: background 0.4s ease;
+}
+
+
+/* =========================================================
+   SCROLLING WORLD
+   ("longer land" + camera that follows the player, like Mario -
+   #levelStage is the fixed-size viewport, #levelWorld is the
+   much wider level that script.js slides left/right under it)
+   ========================================================= */
+
+#gameScreen #levelWorld {
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    /* width is set per-level in px by script.js (longer on
+       harder difficulties, since there are more obstacles) */
+    width: 3000px;
+    height: 100%;
+
+    will-change: transform;
+}
+
+
+/* =========================================================
+   LEVEL THEMES
+
+   Every level uses the same Mario-style sky/clouds/mountains/
+   bricks look; each theme just swaps the accent colors via
+   CSS variables so the five kingdoms still feel distinct.
+   ========================================================= */
+
+#gameScreen #levelStage.theme-jungle {
+    --sky-top: #4fa8e8;
+    --sky-bottom: #b3e8fb;
+    --mountain: #3f9142;
+    --dirt: #6b4423;
+    --brick: #c46a2e;
+    --brick-dark: #96491c;
+}
+
+#gameScreen #levelStage.theme-ocean {
+    --sky-top: #146a9c;
+    --sky-bottom: #7fd3e8;
+    --mountain: #0f7a8c;
+    --grass: #1f9c8f;
+    --grass-dark: #147268;
+    --dirt: #0c4a52;
+    --brick: #2f7e9c;
+    --brick-dark: #1f5a72;
+}
+
+#gameScreen #levelStage.theme-city {
+    --sky-top: #0b0330;
+    --sky-bottom: #003cff;
+    --mountain: #000836;
+    --grass: #0068df;
+    --grass-dark: #09002b;
+    --dirt: #0d0036;
+    --brick: #0035e4;
+    --brick-dark: #0a0029;
+}
+
+#gameScreen #levelStage.theme-volcano {
+    --sky-top: #7a1f0f;
+    --sky-bottom: #e8763a;
+    --mountain: #5c1408;
+    --grass: #8a2a0c;
+    --grass-dark: #5c1408;
+    --dirt: #2c0a04;
+    --brick: #6b2a16;
+    --brick-dark: #4a1a0c;
+}
+
+#gameScreen #levelStage.theme-castle {
+    --sky-top: #201830;
+    --sky-bottom: #4a3868;
+    --mountain: #2e2148;
+    --grass: #453466;
+    --grass-dark: #2e2148;
+    --dirt: #171022;
+    --brick: #574a70;
+    --brick-dark: #392e4c;
+}
+
+#gameScreen #levelStage {
+
+    background-image: linear-gradient(
+        to bottom,
+        var(--sky-top, #4fa8e8) 0%,
+        var(--sky-bottom, #b3e8fb) 100%
+    );
+
+}
+
+
+/* =========================================================
+   CUSTOM PER-LEVEL BACKGROUND IMAGE
+
+   When a level config includes a bgImage, script.js sets it
+   as an inline background-image on #levelStage (inline style
+   wins over the gradient rule above). These rules make it
+   frame nicely and hide the painted clouds/mountains so the
+   photo/artwork isn't competing with them.
+   ========================================================= */
+
+#gameScreen #levelStage.has-custom-bg {
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+#gameScreen #levelStage.has-custom-bg #cloudsLayer,
+#gameScreen #levelStage.has-custom-bg #mountainsLayer {
+    display: none;
+}
+
+
+/* =========================================================
+   CLOUDS & MOUNTAINS (Mario-style backdrop)
+
+   These sit on the viewport (not the scrolling world) so they
+   read as distant background, like the reference art.
+   ========================================================= */
+
+#gameScreen #cloudsLayer {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 1;
+
+    pointer-events: none;
+
+    background-image:
+        radial-gradient(ellipse 60px 30px at 60px 60px, rgba(255,255,255,0.9), transparent 70%),
+        radial-gradient(ellipse 40px 22px at 120px 40px, rgba(255,255,255,0.9), transparent 70%),
+        radial-gradient(ellipse 50px 26px at 340px 100px, rgba(255,255,255,0.85), transparent 70%),
+        radial-gradient(ellipse 70px 34px at 560px 50px, rgba(255,255,255,0.9), transparent 70%),
+        radial-gradient(ellipse 35px 20px at 700px 90px, rgba(255,255,255,0.8), transparent 70%);
+
+    background-repeat: repeat-x;
+    background-size: 820px 220px;
+    background-position: 0 0;
+}
+
+#gameScreen #mountainsLayer {
+    position: absolute;
+
+    left: 0;
+    bottom: 130px;
+
+    width: 100%;
+    height: 45%;
+
+    z-index: 2;
+
+    pointer-events: none;
+
+    opacity: 0.75;
+    filter: blur(1px);
+
+    background-image:
+        linear-gradient(135deg, transparent 74%, var(--mountain, #3f9142) 75%),
+        linear-gradient(225deg, transparent 74%, var(--mountain, #3f9142) 75%);
+
+    background-repeat: repeat-x;
+    background-size: 260px 100%;
+    background-position: 0 bottom, 130px bottom;
+}
+
+
+/* =========================================================
+   BRICKS (shared "Mario block" texture, used by platforms)
+   ========================================================= */
+
+#gameScreen .platform {
+    background-color: var(--brick, #c46a2e);
+
+    background-image:
+        linear-gradient(rgba(0, 0, 0, 0.28) 3px, transparent 3px),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.28) 3px, transparent 3px);
+
+    background-size: 40px 22px;
+}
+
+
+/* =========================================================
+   PLATFORMS ("higher lands")
+   ========================================================= */
+
+#gameScreen .platform {
+    position: absolute;
+
+    z-index: 6;
+
+    border-radius: 4px;
+
+    border-top: 4px solid rgba(255, 255, 255, 0.35);
+    border: 3px solid var(--brick-dark, #96491c);
+
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
+}
+
+
+/* =========================================================
+   SCENERY PROPS ("decorLayer")
+
+   Small themed decorations (trees, coral, lampposts, bones...)
+   scattered along the ground and on top of platforms by
+   script.js's buildDecorations(), picked per-kingdom from
+   LEVEL_DECOR_SETS. Purely visual - sits above the ground/
+   platform art but behind the player sprite.
+   ========================================================= */
+
+#gameScreen #decorLayer {
+    position: absolute;
+
+    left: 0;
+    bottom: 0;
+
+    width: 100%;
+    height: 100%;
+
+    z-index: 7;
+
+    pointer-events: none;
+}
+
+#gameScreen .decorIcon {
+    position: absolute;
+
+    pointer-events: none;
+
+    transform-origin: bottom center;
+}
+
+#gameScreen .decorIcon svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+/* Soft glow for light-emitting props */
+#gameScreen .decorIcon.decorGlowYellow svg {
+    filter: drop-shadow(0 0 9px rgba(255, 224, 110, 0.85));
+}
+
+#gameScreen .decorIcon.decorGlowOrange svg {
+    filter: drop-shadow(0 0 8px rgba(255, 140, 60, 0.85));
+}
+
+#gameScreen .decorIcon.decorGlowPink svg {
+    filter: drop-shadow(0 0 7px rgba(255, 90, 170, 0.75));
+}
+
+#gameScreen .decorIcon.decorGlowBlue svg {
+    filter: drop-shadow(0 0 6px rgba(140, 220, 255, 0.7));
+}
+
+@keyframes decorFloat {
+    0%   { margin-top: 0px; }
+    50%  { margin-top: -8px; }
+    100% { margin-top: 0px; }
+}
+
+
+/* PLAYER */
+
+#gameScreen #gamePlayer {
+    position: absolute;
+
+    width: 80px;
+    height: 80px;
+
+    object-fit: contain;
+
+    left: 120px;
+    bottom: 130px;
+
+    z-index: 10;
+
+    user-select: none;
+
+    pointer-events: none;
+
+    /* facing direction: flipped horizontally with JS by
+       toggling the .facing-left class below */
+    transform-origin: center;
+    transform: scaleX(1);
+}
+
+#gameScreen #gamePlayer.facing-left {
+    transform: scaleX(-1);
+}
+
+
+/* GROUND (Mario-style scalloped grass over dirt)
+
+   Built from separate segments by script.js (buildGround), with
+   real gaps left wherever a level's "holes" are - so there's an
+   actual pit to fall into, not just a painted-on hazard. */
+
+#gameScreen #groundLayer {
+    position: absolute;
+
+    left: 0;
+    bottom: 0;
+
+    width: 100%;
+    height: 130px;
+
+    z-index: 5;
+}
+
+#gameScreen .groundSegment {
+    position: absolute;
+
+    bottom: 0;
+
+    height: 130px;
+
+    background-image:
+        radial-gradient(circle at 10px 0, transparent 11px, var(--grass, #4caf1f) 12px),
+        linear-gradient(
+            var(--grass, #4caf1f) 0,
+            var(--grass, #4caf1f) 38px,
+            var(--grass-dark, #2e8b1f) 38px,
+            var(--grass-dark, #2e8b1f) 46px,
+            var(--dirt, #6b4423) 46px
+        );
+
+    background-repeat: repeat-x, no-repeat;
+    background-size: 26px 26px, 100% 100%;
+    background-position: 0 -6px, 0 0;
+
+    border-top: 4px solid rgba(255, 255, 255, 0.15);
+}
+
+
+/* HOLE / PIT
+
+   Sits in the gap between ground segments. Dark and recessed so
+   it reads as "drop below here and you'll get hurt", with a
+   hazard-striped lip so it's spottable even while running. */
+
+#gameScreen .holePit {
+    position: absolute;
+
+    bottom: 0;
+
+    height: 130px;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #1a0f08 0%,
+            #050302 70%,
+            #000000 100%
+        );
+
+    box-shadow:
+        inset 0 8px 14px rgba(0, 0, 0, 0.9),
+        inset 6px 0 10px -4px rgba(0, 0, 0, 0.8),
+        inset -6px 0 10px -4px rgba(0, 0, 0, 0.8);
+
+    border-top: 6px solid;
+    border-image: repeating-linear-gradient(
+        135deg,
+        #ffcc33 0 14px,
+        #2b2b2b 14px 28px
+    ) 6;
+}
+
+
+/* GAME HUD */
+
+#gameScreen .game-hud {
+    z-index: 50;
+}
+
+
+/* HUD ACTION BUTTONS (Attack, Map, and the potion "use"
+   buttons) - one shared look so the whole bar reads as a set
+   instead of some buttons being styled and others left as bare
+   default browser buttons. */
+
+#gameScreen #attackBtn,
+#gameScreen #leaveGameBtn,
+#gameScreen .useItemBtn {
+    padding: 8px 14px;
+
+    border: 2px solid white;
+    border-radius: 10px;
+
+    background: rgba(0, 0, 0, 0.6);
+
+    color: white;
+
+    font-weight: bold;
+    font-size: inherit;
+    font-family: inherit;
+
+    cursor: pointer;
+
+    transition: background 0.15s ease, transform 0.1s ease;
+}
+
+#gameScreen #attackBtn:hover,
+#gameScreen #leaveGameBtn:hover,
+#gameScreen .useItemBtn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+#gameScreen #attackBtn:active,
+#gameScreen #leaveGameBtn:active,
+#gameScreen .useItemBtn:active:not(:disabled) {
+    transform: scale(0.95);
+}
+
+#gameScreen .useItemBtn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+/* =========================================================
+   MOTION MEADOW - COINS
+   ========================================================= */
+
+#gameScreen .coin {
+    position: absolute;
+
+    width: 45px;
+    height: 45px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 8;
+
+    font-size: 32px;
+
+    user-select: none;
+
+    animation: coinFloat 1s ease-in-out infinite alternate;
+}
+
+@keyframes coinFloat {
+
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(-8px);
+    }
+
+}
+
+
+/* =========================================================
+   LEVEL GOAL - FINISH LINE FLAG
+   Planted on the ground at the end of the level (rather than
+   floating on a platform), so it reads as a finish line.
+   ========================================================= */
+
+#gameScreen #levelGoal {
+    position: absolute;
+
+    right: 5%;
+    bottom: 90px;
+
+    z-index: 8;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    font-size: 55px;
+
+    transform-origin: bottom center;
+
+    animation: flagWave 1s ease-in-out infinite alternate;
+}
+
+#gameScreen #levelGoal span {
+    padding: 6px 10px;
+
+    border-radius: 8px;
+
+    background: rgba(0, 0, 0, 0.65);
+
+    color: white;
+
+    font-size: 13px;
+    font-weight: bold;
+
+    white-space: nowrap;
+}
+
+/* Locked state: dimmed and still, while physics wall questions
+   remain unanswered - a visual cue that this isn't the end yet. */
+#gameScreen #levelGoal.locked {
+    filter: grayscale(0.85) brightness(0.75);
+
+    animation: none;
+}
+
+#gameScreen #levelGoal.locked span::before {
+    content: "🔒 ";
+}
+
+#gameScreen #levelGoal:not(.locked) span::before {
+    content: "🏁 ";
+}
+
+@keyframes flagWave {
+
+    from {
+        transform: rotate(-4deg);
+    }
+
+    to {
+        transform: rotate(4deg);
+    }
+
+}
+
+/* =========================================================
+   GOAL LOCKED HINT (toast)
+   Nudges the player back to the remaining physics walls when
+   they touch the Finish flag before answering every question.
+   ========================================================= */
+
+#gameScreen #goalLockedHint {
+    position: absolute;
+
+    top: 90px;
+    left: 50%;
+
+    transform: translate(-50%, -12px);
+
+    z-index: 40;
+
+    padding: 10px 18px;
+
+    border-radius: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+
+    background: rgba(180, 40, 40, 0.92);
+
+    color: white;
+
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+
+    white-space: nowrap;
+
+    opacity: 0;
+    pointer-events: none;
+
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+#gameScreen #goalLockedHint.active {
+    opacity: 1;
+
+    transform: translate(-50%, 0);
+}
+
+/* =========================================================
+   PHYSICS WALL
+   ========================================================= */
+
+/* =========================================================
+   PHYSICS WALL — styled like a classic "?" mystery block,
+   taller now so it reads as a real obstacle you have to
+   answer your way through.
+   ========================================================= */
+
+#gameScreen .physicsWall {
+    position: absolute;
+
+    bottom: 130px;
+
+    width: 90px;
+    height: 230px;
+
+    z-index: 9;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    background: linear-gradient(160deg, #ffe066 0%, #ffc02e 55%, #e8a412 100%);
+
+    border: 4px solid #7a4a00;
+    border-radius: 10px;
+
+    box-shadow:
+        inset 0 0 0 3px rgba(255, 255, 255, 0.35),
+        0 6px 14px rgba(0, 0, 0, 0.45);
+
+    font-size: 52px;
+    font-weight: 900;
+    color: #7a4a00;
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.4);
+
+    user-select: none;
+
+    transition: opacity 0.25s ease, transform 0.2s ease;
+}
+
+#gameScreen .physicsWall.wallPassed {
+    opacity: 0;
+    transform: scale(0.85);
+    pointer-events: none;
+}
+
+#gameScreen .physicsWall .physicsWallLabel {
+    position: absolute;
+
+    bottom: -35px;
+
+    padding: 5px 8px;
+
+    border-radius: 7px;
+
+    background: rgba(0, 0, 0, 0.75);
+
+    color: white;
+
+    font-size: 12px;
+    font-weight: bold;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   PHYSICS QUIZ OVERLAY
+   ========================================================= */
+
+#gameScreen #levelIntroOverlay {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 110;
+
+    display: none;
+
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+
+    background: rgba(10, 15, 25, 0.55);
+    backdrop-filter: blur(2px);
+}
+
+#gameScreen #levelIntroOverlay.active {
+    display: flex;
+}
+
+#gameScreen #levelIntroBox {
+    width: min(480px, 88%);
+    max-height: 90vh;
+    flex-shrink: 0;
+
+    margin: auto;
+    padding: 32px 30px;
+
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+
+    border-radius: 18px;
+
+    background: #ffffff;
+
+    text-align: center;
+
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+
+    animation: introPop 0.2s ease;
+}
+
+@keyframes introPop {
+
+    from {
+        transform: scale(0.92);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+}
+
+#gameScreen #levelIntroTitle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    margin-bottom: 16px;
+
+    font-size: 24px;
+    font-weight: bold;
+
+    color: #1b2733;
+}
+
+#gameScreen #levelIntroDetails {
+    margin-bottom: 14px;
+
+    font-size: 14px;
+    font-style: italic;
+    line-height: 1.5;
+
+    color: #6b5b3d;
+}
+
+#gameScreen #levelIntroText {
+    margin-bottom: 24px;
+
+    font-size: 15px;
+    line-height: 1.5;
+
+    color: #4a5666;
+}
+
+#gameScreen #levelIntroStartBtn {
+    padding: 12px 34px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #ff9f1c;
+
+    color: #ffffff;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: transform 0.15s ease, background 0.15s ease;
+}
+
+#gameScreen #levelIntroStartBtn:hover {
+    background: #ff8c00;
+    transform: scale(1.04);
+}
+
+#gameScreen #levelIntroStartBtn:active {
+    transform: scale(0.97);
+}
+
+#gameScreen #quizOverlay {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 100;
+
+    display: none;
+
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+
+    background: rgba(0, 0, 0, 0.7);
+}
+
+#gameScreen #quizOverlay.active {
+    display: flex;
+}
+
+#gameScreen #quizBox {
+    width: min(550px, 90%);
+    max-height: 90vh;
+    flex-shrink: 0;
+
+    margin: auto;
+    padding: 30px;
+
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+
+    border: 3px solid white;
+    border-radius: 20px;
+
+    background: #123d28;
+
+    text-align: center;
+
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+#gameScreen #quizBox h2 {
+    margin-bottom: 20px;
+
+    font-size: 28px;
+}
+
+#gameScreen #quizTimer {
+    margin-bottom: 10px;
+
+    font-size: 22px;
+    font-weight: bold;
+    color: #72e06b;
+}
+
+#gameScreen #quizTimer.timerLow {
+    color: #ff7777;
+}
+
+#gameScreen #questionText {
+    margin-bottom: 25px;
+
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#gameScreen #answerOptions {
+    display: flex;
+    flex-direction: column;
+
+    gap: 12px;
+}
+
+#gameScreen .answerBtn {
+    width: 100%;
+
+    padding: 14px;
+
+    border: 2px solid white;
+    border-radius: 10px;
+
+    background: rgba(255, 255, 255, 0.1);
+
+    color: white;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: transform 0.15s ease,
+                background 0.15s ease;
+}
+
+#gameScreen .answerBtn:hover {
+    transform: scale(1.02);
+
+    background: rgba(255, 255, 255, 0.2);
+}
+
+#gameScreen #quizItems {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 12px;
+
+    margin-top: 16px;
+}
+
+#gameScreen .itemBtn {
+    padding: 10px 16px;
+
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    border-radius: 10px;
+
+    background: rgba(255, 255, 255, 0.08);
+
+    color: white;
+
+    font-size: 14px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: transform 0.15s ease, background 0.15s ease, opacity 0.15s ease;
+}
+
+#gameScreen .itemBtn:hover:not(:disabled) {
+    transform: scale(1.05);
+
+    background: rgba(255, 255, 255, 0.2);
+}
+
+#gameScreen .itemBtn:disabled {
+    opacity: 0.4;
+
+    cursor: not-allowed;
+    transform: none;
+}
+
+#gameScreen #quizFeedback {
+    min-height: 25px;
+
+    margin-top: 18px;
+
+    font-weight: bold;
+}
+
+#gameScreen #quizExplanation {
+    display: none;
+
+    margin-top: 10px;
+    padding: 12px 14px;
+
+    border-radius: 10px;
+
+    background: rgba(255, 255, 255, 0.1);
+
+    color: #ffe9b3;
+
+    font-size: 14px;
+    line-height: 1.5;
+
+    text-align: left;
+}
+
+#gameScreen #quizExplanation.active {
+    display: block;
+}
+
+#gameScreen #quizContinueBtn {
+    display: none;
+
+    width: 100%;
+    margin-top: 14px;
+    padding: 12px;
+
+    border: 2px solid white;
+    border-radius: 10px;
+
+    background: rgba(0, 38, 253, 0.9);
+
+    color: white;
+
+    font-size: 15px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: transform 0.15s ease, background 0.15s ease;
+}
+
+#gameScreen #quizContinueBtn:hover {
+    transform: scale(1.02);
+
+    background: rgba(0, 38, 253, 1);
+}
+
+#gameScreen #quizContinueBtn.active {
+    display: block;
+}
+
+/* =========================================================
+   MOTION MEADOW - MONSTER
+   ========================================================= */
+
+#gameScreen .monster {
+    position: absolute;
+
+    left: 42%;
+    bottom: 130px;
+
+    width: 65px;
+    height: 65px;
+
+    z-index: 8;
+
+    user-select: none;
+
+    transition: left 0.08s linear, filter 0.2s ease;
+
+    animation: monsterBob 1.1s ease-in-out infinite;
+}
+
+#gameScreen .monster.alert {
+    animation: monsterBobAlert 0.5s ease-in-out infinite;
+
+    filter: drop-shadow(0 0 6px rgba(255, 70, 60, 0.6));
+}
+
+#gameScreen .monster .monsterBody {
+    position: relative;
+
+    width: 56px;
+    height: 46px;
+
+    margin: 0 auto;
+
+    border-radius: 45% 45% 50% 50% / 60% 60% 40% 40%;
+
+    background: linear-gradient(160deg, #9a6cf6, #5b32c9);
+
+    box-shadow:
+        inset 0 -6px 9px rgba(0, 0, 0, 0.25),
+        0 4px 8px rgba(0, 0, 0, 0.35);
+
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+#gameScreen .monster.alert .monsterBody {
+    background: linear-gradient(160deg, #ff7a63, #c22b2b);
+
+    box-shadow:
+        inset 0 -6px 9px rgba(0, 0, 0, 0.25),
+        0 0 14px 4px rgba(255, 80, 60, 0.65);
+}
+
+#gameScreen .monster .monsterSpike {
+    position: absolute;
+
+    top: -8px;
+
+    width: 0;
+    height: 0;
+
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 10px solid #5b32c9;
+}
+
+#gameScreen .monster.alert .monsterSpike {
+    border-bottom-color: #c22b2b;
+}
+
+#gameScreen .monster .monsterSpike:nth-child(1) { left: 5px; }
+#gameScreen .monster .monsterSpike:nth-child(2) { left: 21px; }
+#gameScreen .monster .monsterSpike:nth-child(3) { left: 37px; }
+
+#gameScreen .monster .monsterEyes {
+    position: absolute;
+
+    top: 12px;
+    left: 0;
+    right: 0;
+
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+#gameScreen .monster .monsterEye {
+    position: relative;
+
+    width: 13px;
+    height: 13px;
+
+    display: block;
+
+    border-radius: 50%;
+
+    background: white;
+
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.15);
+}
+
+#gameScreen .monster .monsterEye::after {
+    content: "";
+
+    position: absolute;
+
+    top: 3px;
+    left: 3px;
+
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: #1a1a1a;
+}
+
+#gameScreen .monster .monsterMouth {
+    position: absolute;
+
+    bottom: 7px;
+    left: 50%;
+
+    width: 24px;
+    height: 7px;
+
+    transform: translateX(-50%);
+
+    background: #1a1a1a;
+
+    border-radius: 0 0 7px 7px;
+
+    overflow: hidden;
+}
+
+#gameScreen .monster .monsterMouth::before,
+#gameScreen .monster .monsterMouth::after {
+    content: "";
+
+    position: absolute;
+    top: 0;
+
+    width: 0;
+    height: 0;
+
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid white;
+}
+
+#gameScreen .monster .monsterMouth::before { left: 3px; }
+#gameScreen .monster .monsterMouth::after { right: 3px; }
+
+#gameScreen .monster .monsterLegs {
+    display: flex;
+    justify-content: center;
+    gap: 13px;
+
+    margin-top: -1px;
+}
+
+#gameScreen .monster .monsterLegs span {
+    width: 8px;
+    height: 8px;
+
+    display: block;
+
+    border-radius: 3px;
+
+    background: #4a2a99;
+
+    animation: monsterLegs 0.5s ease-in-out infinite alternate;
+}
+
+#gameScreen .monster.alert .monsterLegs span {
+    background: #9c1f1f;
+
+    animation-duration: 0.22s;
+}
+
+#gameScreen .monster .monsterLegs span:nth-child(2) {
+    animation-delay: 0.25s;
+}
+
+@keyframes monsterBob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+}
+
+@keyframes monsterBobAlert {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-3px) scale(1.05); }
+}
+
+@keyframes monsterLegs {
+    from { transform: translateY(0); }
+    to { transform: translateY(3px); }
+}
+
+/* Per-kingdom monster coloring, so each location's enemies
+   match its theme instead of all looking identical. */
+#gameScreen #levelStage.theme-jungle .monster .monsterBody {
+    background: linear-gradient(160deg, #9ccc65, #33691e);
+}
+#gameScreen #levelStage.theme-jungle .monster.alert .monsterBody {
+    background: linear-gradient(160deg, #ff7a63, #c22b2b);
+}
+#gameScreen #levelStage.theme-jungle .monster .monsterSpike {
+    border-bottom-color: #33691e;
+}
+
+#gameScreen #levelStage.theme-ocean .monster .monsterBody {
+    background: linear-gradient(160deg, #4dd0e1, #01579b);
+}
+#gameScreen #levelStage.theme-ocean .monster.alert .monsterBody {
+    background: linear-gradient(160deg, #ff7a63, #c22b2b);
+}
+#gameScreen #levelStage.theme-ocean .monster .monsterSpike {
+    border-bottom-color: #01579b;
+}
+
+#gameScreen #levelStage.theme-city .monster .monsterBody {
+    background: linear-gradient(160deg, #ffd54f, #e65100);
+}
+#gameScreen #levelStage.theme-city .monster.alert .monsterBody {
+    background: linear-gradient(160deg, #ff7a63, #c22b2b);
+}
+#gameScreen #levelStage.theme-city .monster .monsterSpike {
+    border-bottom-color: #e65100;
+}
+
+#gameScreen #levelStage.theme-volcano .monster .monsterBody {
+    background: linear-gradient(160deg, #ff8a65, #b71c1c);
+}
+#gameScreen #levelStage.theme-volcano .monster.alert .monsterBody {
+    background: linear-gradient(160deg, #ffab91, #8e0000);
+}
+#gameScreen #levelStage.theme-volcano .monster .monsterSpike {
+    border-bottom-color: #b71c1c;
+}
+
+#gameScreen #levelStage.theme-castle .monster .monsterBody {
+    background: linear-gradient(160deg, #b39ddb, #311b92);
+}
+#gameScreen #levelStage.theme-castle .monster.alert .monsterBody {
+    background: linear-gradient(160deg, #ff7a63, #c22b2b);
+}
+#gameScreen #levelStage.theme-castle .monster .monsterSpike {
+    border-bottom-color: #311b92;
+}
+
+/* =========================================================
+   SWORD ATTACK EFFECT
+
+   A real swinging blade (blade/guard/hilt built from divs)
+   plus a bright arc trail, instead of a static emoji. Both
+   the wrapper and its children use "forwards" fill-mode so
+   they end the animation at opacity:0 and STAY there - the
+   old version left an inline `display:flex` on the element
+   which permanently overrode the base `display:none` rule
+   once the CSS animation finished, leaving a frozen sword
+   icon stuck in the level. Nothing here sets an inline
+   display anymore, so the base rule always wins at rest.
+   ========================================================= */
+
+#attackEffect {
+    position: absolute;
+
+    width: 100px;
+    height: 100px;
+
+    z-index: 50;
+
+    display: none;
+
+    pointer-events: none;
+
+    transform-origin: 25% 85%;
+}
+
+#attackEffect.slash {
+    display: block;
+
+    animation: attackEffectFade 0.32s ease-out forwards;
+}
+
+/* Mirror the whole effect when the player is facing left, so
+   the swing always reads as swinging toward whatever the
+   player is facing rather than always to the right. */
+#attackEffect.facing-left {
+    transform: scaleX(-1);
+}
+
+@keyframes attackEffectFade {
+
+    0% {
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 1;
+    }
+
+    75% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+
+}
+
+/* Bright arc trail sweeping behind the blade */
+#attackEffect #attackArc {
+    position: absolute;
+
+    top: 8px;
+    left: 8px;
+
+    width: 82px;
+    height: 82px;
+
+    border-radius: 50%;
+
+    border: 6px solid transparent;
+    border-top-color: rgba(255, 255, 255, 0.9);
+    border-right-color: rgba(173, 216, 255, 0.75);
+
+    filter: blur(0.4px);
+
+    opacity: 0;
+
+    animation: arcSweep 0.32s ease-out forwards;
+}
+
+@keyframes arcSweep {
+
+    0% {
+        transform: rotate(-65deg) scale(0.35);
+        opacity: 0;
+    }
+
+    30% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: rotate(50deg) scale(1);
+        opacity: 0;
+    }
+
+}
+
+/* The sword: blade + cross-guard + hilt, pivoting from the
+   player's hand and swinging down through the target. */
+#attackEffect #attackSword {
+    position: absolute;
+
+    left: 32px;
+    bottom: 16px;
+
+    width: 16px;
+    height: 70px;
+
+    transform-origin: 50% 100%;
+
+    animation: swordSwing 0.32s ease-out forwards;
+}
+
+@keyframes swordSwing {
+
+    0% {
+        transform: rotate(-75deg);
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 1;
+    }
+
+    55% {
+        transform: rotate(20deg);
+    }
+
+    100% {
+        transform: rotate(55deg);
+        opacity: 0;
+    }
+
+}
+
+#attackEffect .swordBlade {
+    position: absolute;
+
+    left: 4px;
+    top: 0;
+
+    width: 8px;
+    height: 52px;
+
+    background: linear-gradient(180deg, #f7fbff, #c3d3e3 55%, #8a97a8);
+
+    clip-path: polygon(50% 0%, 100% 14%, 78% 100%, 22% 100%, 0% 14%);
+
+    box-shadow: 0 0 7px rgba(255, 255, 255, 0.65);
+}
+
+#attackEffect .swordGuard {
+    position: absolute;
+
+    left: -3px;
+    top: 49px;
+
+    width: 22px;
+    height: 6px;
+
+    border-radius: 3px;
+
+    background: linear-gradient(90deg, #c8922f, #ffe27a, #c8922f);
+
+    box-shadow: 0 0 4px rgba(255, 210, 100, 0.6);
+}
+
+#attackEffect .swordHilt {
+    position: absolute;
+
+    left: 5px;
+    top: 55px;
+
+    width: 6px;
+    height: 16px;
+
+    border-radius: 2px;
+
+    background: linear-gradient(180deg, #7a5630, #402c14);
+}
+
+/* =========================================================
+   SHOP
+   ========================================================= */
+
+#shopScreen {
+    position: absolute;
+    inset: 0;
+
+    display: none;
+
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+
+    background-image:
+        linear-gradient(
+            rgba(4, 30, 15, 0.75),
+            rgba(4, 20, 10, 0.85)
+        ),
+        var(--screen-bg);
+
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+#shopScreen.active {
+    display: flex;
+}
+
+#inventoryScreen {
+    position: absolute;
+    inset: 0;
+
+    display: none;
+
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+
+    background-image:
+        linear-gradient(
+            rgba(4, 30, 15, 0.75),
+            rgba(4, 20, 10, 0.85)
+        ),
+        var(--screen-bg);
+
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+#inventoryScreen.active {
+    display: flex;
+}
+
+.shop-container {
+    width: 90%;
+    max-width: 900px;
+    flex-shrink: 0;
+
+    margin: auto;
+    padding: 30px;
+
+    text-align: center;
+}
+
+.shop-container h1 {
+    font-size: 42px;
+    margin-bottom: 10px;
+}
+
+.shop-coins {
+    font-size: 22px;
+    margin-bottom: 25px;
+}
+
+.shop-item {
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+
+    padding: 18px;
+
+    margin: 15px 0;
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 15px;
+
+    background: rgba(0, 0, 0, 0.45);
+
+    transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.shop-item:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+.item-icon {
+    flex-shrink: 0;
+
+    width: 70px;
+    height: 70px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 38px;
+
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.12);
+}
+
+.item-info {
+    flex: 1;
+
+    text-align: left;
+}
+
+.item-info h2 {
+    margin: 0;
+}
+
+.item-info p {
+    margin: 5px 0;
+}
+
+.price {
+    font-weight: bold;
+}
+
+.buyBtn,
+.sellBtn {
+    flex-shrink: 0;
+
+    min-width: 100px;
+
+    padding: 12px 22px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    font-weight: bold;
+    font-size: 14px;
+    text-align: center;
+    white-space: nowrap;
+
+    transition: transform 0.12s ease, filter 0.12s ease;
+}
+
+.buyBtn {
+    background: linear-gradient(180deg, #ffd85e, #f0a93a);
+    color: #4a2e00;
+}
+
+.buyBtn:hover:not(:disabled) {
+    filter: brightness(1.08);
+    transform: scale(1.05);
+}
+
+.buyBtn:active:not(:disabled) {
+    transform: scale(0.97);
+}
+
+.buyBtn.owned {
+    background: #2ecc71;
+    color: #063;
+    cursor: default;
+    transform: none;
+}
+
+.buyBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.sellBtn {
+    background: linear-gradient(180deg, #ff8080, #e05d5d);
+    color: white;
+}
+
+.sellBtn:hover:not(:disabled) {
+    filter: brightness(1.08);
+    transform: scale(1.05);
+}
+
+.sellBtn:active:not(:disabled) {
+    transform: scale(0.97);
+}
+
+.shop-coins-warning {
+    color: #ff8f8f;
+}
+
+/* =========================================================
+   22.5 INVENTORY
+   ========================================================= */
+
+.inventory-empty-hint {
+    margin: 20px 0;
+
+    color: #d8ffd8;
+    opacity: 0.8;
+}
+
+.inventory-prize-box {
+    width: 100%;
+
+    margin: 20px 0;
+    padding: 18px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    border: 2px dashed #ffd23c;
+    border-radius: 14px;
+
+    background: rgba(255, 205, 60, 0.1);
+}
+
+.inventory-prize-box[hidden] {
+    display: none;
+}
+
+.inventory-prize-label {
+    margin-bottom: 12px;
+
+    font-size: 17px;
+    font-weight: bold;
+    text-align: center;
+
+    color: #ffe27a;
+}
+
+#inventoryScreen .prizeClaimBtn {
+    display: inline-block;
+
+    padding: 12px 22px;
+
+    border: 3px solid #fff3cf;
+    border-radius: 14px;
+
+    background: linear-gradient(
+        135deg,
+        rgba(255, 205, 60, 0.95),
+        rgba(255, 150, 30, 0.95)
+    );
+
+    color: #3a2400;
+
+    font-size: 15px;
+    font-weight: bold;
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+#inventoryScreen .prizeClaimBtn:hover {
+    transform: scale(1.05);
+
+    background: linear-gradient(
+        135deg,
+        rgba(255, 215, 90, 1),
+        rgba(255, 165, 45, 1)
+    );
+}
+
+#inventoryScreen .backBtn {
+    margin-top: 10px;
+}
+
+/* =========================================================
+   23. MENU PLAYER LINE (name shown above menu buttons)
+   ========================================================= */
+
+#menuScreen .menu-player-line {
+    margin-bottom: 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    font-size: 15px;
+    color: #d8ffd8;
+}
+
+#menuScreen #menuPlayerName {
+    font-weight: bold;
+    color: #ffd23a;
+}
+
+#menuScreen #menuChangeNameBtn {
+    padding: 3px 10px;
+
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 8px;
+
+    background: rgba(0, 0, 0, 0.35);
+    color: white;
+
+    font-size: 12px;
+    cursor: pointer;
+}
+
+#menuScreen #menuChangeNameBtn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+
+/* =========================================================
+   24. NAME ENTRY MODAL
+   ========================================================= */
+
+#nameModal {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 500;
+
+    display: none;
+
+    justify-content: center;
+    align-items: center;
+
+    background: rgba(0, 0, 0, 0.75);
+}
+
+#nameModal.active {
+    display: flex;
+}
+
+#nameModal #nameModalBox {
+    width: min(400px, 90%);
+
+    padding: 30px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    text-align: center;
+
+    border: 3px solid white;
+    border-radius: 20px;
+
+    background: #123d28;
+
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+#nameModal h2 {
+    margin-bottom: 10px;
+
+    font-size: 24px;
+}
+
+#nameModal p {
+    margin-bottom: 16px;
+
+    font-size: 14px;
+
+    color: #d8ffd8;
+}
+
+#nameModal #nameModalInput {
+    width: 100%;
+
+    margin-bottom: 8px;
+    padding: 12px 14px;
+
+    border: 2px solid white;
+    border-radius: 10px;
+
+    background: rgba(255, 255, 255, 0.95);
+    color: #111;
+
+    font-size: 16px;
+
+    text-align: center;
+}
+
+#nameModal #nameModalError {
+    min-height: 18px;
+    margin-bottom: 10px;
+
+    font-size: 13px;
+    color: #ff7777;
+}
+
+#nameModal #nameModalSaveBtn {
+    width: 100%;
+    padding: 12px 20px;
+
+    border: 3px solid white;
+    border-radius: 14px;
+
+    background: rgba(0, 38, 253, 0.9);
+    color: white;
+
+    font-size: 18px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+#nameModal #nameModalSaveBtn:hover {
+    transform: scale(1.03);
+
+    background: rgba(0, 38, 253, 1);
+}
+
+
+/* =========================================================
+   LEVEL COMPLETE MODAL
+   ========================================================= */
+
+#levelCompleteModal {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 600;
+
+    display: none;
+
+    justify-content: center;
+    align-items: center;
+
+    background: rgba(0, 0, 0, 0.75);
+}
+
+#levelCompleteModal.active {
+    display: flex;
+}
+
+#levelCompleteModal #levelCompleteModalBox {
+    width: min(420px, 90%);
+
+    padding: 30px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    text-align: center;
+
+    border: 3px solid white;
+    border-radius: 20px;
+
+    background: #123d28;
+
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+#levelCompleteModal h2 {
+    margin-bottom: 14px;
+
+    font-size: 24px;
+}
+
+#levelCompleteModal #levelCompleteBody {
+    margin-bottom: 20px;
+
+    font-size: 15px;
+    line-height: 1.6;
+
+    color: #d8ffd8;
+
+    white-space: pre-line;
+}
+
+#levelCompleteModal #levelCompletePrizeBox {
+    width: 100%;
+
+    margin-bottom: 20px;
+    padding: 16px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    border: 2px dashed #ffd23c;
+    border-radius: 14px;
+
+    background: rgba(255, 205, 60, 0.1);
+}
+
+/* The [hidden] attribute alone loses to the rule above because
+   two ID selectors out-specify the browser's default [hidden]
+   style - without this, the prize box stayed visible even when
+   JS set prizeBox.hidden = true. */
+#levelCompleteModal #levelCompletePrizeBox[hidden] {
+    display: none;
+}
+
+#levelCompleteModal #levelCompletePrizeLabel {
+    margin-bottom: 6px;
+
+    font-size: 17px;
+    font-weight: bold;
+
+    color: #ffe27a;
+}
+
+#levelCompleteModal .prizeClaimBtn {
+    display: inline-block;
+
+    padding: 12px 22px;
+
+    border: 3px solid #fff3cf;
+    border-radius: 14px;
+
+    background: linear-gradient(
+        135deg,
+        rgba(255, 205, 60, 0.95),
+        rgba(255, 150, 30, 0.95)
+    );
+
+    color: #3a2400;
+
+    font-size: 15px;
+    font-weight: bold;
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+#levelCompleteModal .prizeClaimBtn:hover {
+    transform: scale(1.05);
+
+    background: linear-gradient(
+        135deg,
+        rgba(255, 215, 90, 1),
+        rgba(255, 165, 45, 1)
+    );
+}
+
+#levelCompleteModal #levelCompleteButtonRow {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    width: 100%;
+}
+
+#levelCompleteModal .levelCompleteBtn {
+    flex: 1 1 auto;
+    min-width: 90px;
+
+    padding: 12px 14px;
+
+    border: 3px solid white;
+    border-radius: 14px;
+
+    color: white;
+
+    font-size: 15px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+#levelCompleteModal .levelCompleteBtn:hover {
+    transform: scale(1.03);
+}
+
+#levelCompleteModal .levelCompleteBtnSecondary {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+#levelCompleteModal .levelCompleteBtnSecondary:hover {
+    background: rgba(255, 255, 255, 0.22);
+}
+
+#levelCompleteModal .levelCompleteBtnPrimary {
+    flex-basis: 100%;
+
+    background: rgba(0, 38, 253, 0.9);
+}
+
+#levelCompleteModal .levelCompleteBtnPrimary:hover {
+    background: rgba(0, 38, 253, 1);
+}
+
+
+/* =========================================================
+   SETTINGS MODAL
+   ========================================================= */
+
+#settingsModal {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 500;
+
+    display: none;
+
+    justify-content: center;
+    align-items: center;
+
+    background: rgba(0, 0, 0, 0.75);
+}
+
+#settingsModal.active {
+    display: flex;
+}
+
+#settingsModal #settingsModalBox {
+    width: min(420px, 90%);
+
+    padding: 30px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
+    text-align: center;
+
+    border: 3px solid white;
+    border-radius: 20px;
+
+    background: #123d28;
+
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+#settingsModal h2 {
+    margin-bottom: 20px;
+
+    font-size: 24px;
+
+    color: white;
+}
+
+#settingsModal .settingsRow {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    gap: 8px;
+
+    margin-bottom: 18px;
+
+    text-align: left;
+}
+
+#settingsModal .settingsRow label {
+    font-size: 14px;
+    font-weight: bold;
+
+    color: #d8ffd8;
+}
+
+#settingsModal .settingsRowToggle {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#settingsModal input[type="range"] {
+    width: 100%;
+
+    accent-color: #ff9f1c;
+}
+
+#settingsModal input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+
+    accent-color: #ff9f1c;
+
+    cursor: pointer;
+}
+
+#settingsModal #resetProgressBtn {
+    width: 100%;
+    padding: 12px 20px;
+    margin-bottom: 14px;
+
+    border: 2px solid rgba(255, 119, 119, 0.8);
+    border-radius: 14px;
+
+    background: rgba(255, 77, 77, 0.18);
+    color: #ffb3b3;
+
+    font-size: 15px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+#settingsModal #resetProgressBtn:hover {
+    transform: scale(1.02);
+
+    background: rgba(255, 77, 77, 0.32);
+}
+
+#settingsModal #settingsCloseBtn {
+    width: 100%;
+    padding: 12px 20px;
+
+    border: 3px solid white;
+    border-radius: 14px;
+
+    background: rgba(0, 38, 253, 0.9);
+    color: white;
+
+    font-size: 18px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+#settingsModal #settingsCloseBtn:hover {
+    transform: scale(1.03);
+
+    background: rgba(0, 38, 253, 1);
+}
+
+
+/* =========================================================
+   ONLINE LEADERBOARD
+   ========================================================= */
+.leaderboard-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.75);
+}
+.leaderboard-modal.active { display: flex; }
+.leaderboard-box {
+    width: min(620px, 94vw);
+    max-height: 88vh;
+    overflow: hidden;
+    padding: 26px;
+    border: 3px solid #fff;
+    border-radius: 20px;
+    background: #102619;
+    box-shadow: 0 0 30px rgba(0,0,0,.7);
+    color: #fff;
+    text-align: center;
+}
+.leaderboard-box h2 { margin: 0 0 8px; font-size: clamp(25px,5vw,38px); }
+#leaderboardStatus { min-height: 24px; opacity: .85; }
+#leaderboardList {
+    max-height: 52vh;
+    overflow-y: auto;
+    touch-action: pan-y;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 18px 0;
+}
+.leaderboard-row {
+    display: grid;
+    grid-template-columns: 65px 1fr auto;
+    gap: 10px;
+    align-items: center;
+    padding: 12px 14px;
+    border: 2px solid rgba(255,255,255,.25);
+    border-radius: 12px;
+    background: rgba(0,0,0,.25);
+    text-align: left;
+}
+.leaderboard-rank { font-weight: 800; }
+.leaderboard-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 800; }
+.leaderboard-score { white-space: nowrap; font-weight: 800; }
+.leaderboard-empty { padding: 20px; opacity: .85; }
+.leaderboard-actions { display: flex; justify-content: center; gap: 10px; }
+.leaderboard-actions button {
+    padding: 11px 17px;
+    border: 2px solid #fff;
+    border-radius: 10px;
+    background: #17295a;
+    color: #fff;
+    font-weight: 800;
+    cursor: pointer;
+}

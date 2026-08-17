@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+
+    <title>SciVenture</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ================================= -->
+    <!-- BACKGROUND MUSIC                  -->
+    <!-- ================================= -->
+
+    <audio id="bgMusic" loop>
+        <source id="bgMusicSource" src="audio/bgm/background.mp3" type="audio/mpeg">
+    </audio>
+
+
+    <!-- ================================= -->
+    <!-- LOADING SCREEN                    -->
+    <!-- ================================= -->
+
+    <section id="loadingScreen" class="screen active">
+
+        <div class="loading-content">
+
+            <img src="images/logo.png"
+                 class="loading-logo"
+                 alt="SciVenture">
+
+            <h2>Loading...</h2>
+
+            <div class="loading-bar">
+                <div id="loadingProgress"></div>
+            </div>
+
+            <p id="loadingPercent">0%</p>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================= -->
+    <!-- MAIN MENU                         -->
+    <!-- ================================= -->
+
+    <section id="menuScreen" class="screen">
+
+        <div class="menu-content">
+
+            <img src="images/logo.png"
+                 class="menu-logo"
+                 alt="SciVenture">
+
+            <p id="menuPlayerLine" class="menu-player-line">
+                Playing as <span id="menuPlayerName">Explorer</span>
+                <button id="menuChangeNameBtn">✏ change</button>
+            </p>
+
+            <div class="menu-buttons">
+
+                <button id="playBtn" class="menu-play-btn">
+                    ▶ PLAY
+                </button>
+
+                <div class="menu-buttons-columns">
+
+                    <div class="menu-buttons-col">
+
+                        <button id="customizeBtn">
+                            👤 CHARACTERS
+                        </button>
+
+                        <button id="profileBtn">
+                            🧭 PROFILE
+                        </button>
+
+                        <button id="leaderboardBtn">
+                            🏆 LEADERBOARD
+                        </button>
+
+                    </div>
+
+                    <div class="menu-buttons-col">
+
+                        <button id="shopBtn">🛒 SHOP</button>
+
+                        <button id="prizeBtn" class="prizeMenuBtn">
+                            🎒 INVENTORY
+                        </button>
+
+                        <button id="settingsBtn">
+                            ⚙ SETTINGS
+                        </button>
+
+                        <button id="exitBtn">
+                            🚪 EXIT
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================= -->
+    <!-- CUSTOMIZE SCREEN                  -->
+    <!-- ================================= -->
+
+    <section id="customizeScreen" class="screen">
+
+        <div class="customize-content">
+
+            <h1>Characters</h1>
+
+            <img src="images/player-game.png"
+                 id="characterPreview"
+                 alt="Explorer">
+
+            <h2 class="section-title">Choose Your Character</h2>
+            <p class="character-hint">
+                Unlock new explorers by completing kingdoms.
+            </p>
+
+            <div class="character-grid" id="characterGrid">
+                <!-- populated by script.js (renderCharacterGrid) -->
+            </div>
+
+            <button class="backBtn" id="customizeBackBtn">
+                ⬅ BACK
+            </button>
+
+        </div>
+
+    </section>
+
+    <!-- ================================= -->
+    <!-- PROFILE SCREEN                    -->
+    <!-- ================================= -->
+
+    <section id="profileScreen" class="screen">
+
+        <div class="profile-content">
+
+            <h1>Profile</h1>
+
+            <p id="profilePlayerName" class="profile-name">Explorer</p>
+
+            <p class="profile-score-label">⭐ Total Score</p>
+            <p id="profileScore" class="profile-score">0</p>
+
+            <h2 class="section-title">Active Character</h2>
+
+            <img src="images/player-map.png"
+                 id="profileCharacterImg"
+                 class="profile-character-img"
+                 alt="Explorer">
+
+            <p id="profileCharacterName" class="profile-character-name">Explorer</p>
+
+            <button class="backBtn" id="profileBackBtn">
+                ⬅ BACK
+            </button>
+
+        </div>
+
+    </section>
+
+    <!-- ================================= -->
+    <!-- SHOP SCREEN                       -->
+    <!-- ================================= -->
+
+    <section id="shopScreen" class="screen">
+
+    <div class="shop-container">
+
+        <h1>🛒 SciVenture Shop</h1>
+
+        <p class="shop-coins">
+            🪙 Coins: <span id="shopCoins">0</span>
+        </p>
+
+
+        <!-- Golden Sword -->
+
+        <div class="shop-item">
+
+            <div class="item-icon">🗡️</div>
+
+            <div class="item-info">
+
+                <h2>Golden Sword</h2>
+
+                <p>
+                    Defeat monsters.
+                </p>
+
+                <p class="price">
+                    🪙 50
+                </p>
+
+            </div>
+
+            <button class="buyBtn" data-item="sword">
+                BUY
+            </button>
+
+        </div>
+
+
+        <!-- Golden Shield -->
+
+        <div class="shop-item">
+
+            <div class="item-icon">🛡️</div>
+
+            <div class="item-info">
+
+                <h2>Golden Shield</h2>
+
+                <p>
+                    Protects you from 3 monster hits.
+                </p>
+
+                <p class="price">
+                    🪙 75
+                </p>
+
+            </div>
+
+            <button class="buyBtn" data-item="shield">
+                BUY
+            </button>
+
+        </div>
+
+
+        <!-- Crystal Ball -->
+
+        <div class="shop-item">
+
+            <div class="item-icon">🔮</div>
+
+            <div class="item-info">
+
+                <h2>Crystal Ball</h2>
+
+                <p>
+                    Gives you a hint for a question.
+                </p>
+
+                <p class="price">
+                    🪙 30
+                </p>
+
+            </div>
+
+            <button class="buyBtn" data-item="crystalBall">
+                BUY
+            </button>
+
+        </div>
+
+
+        <!-- Magic Key -->
+
+        <div class="shop-item">
+
+            <div class="item-icon">🔑</div>
+
+            <div class="item-info">
+
+                <h2>Magic Key</h2>
+
+                <p>
+                    Skip one question.
+                </p>
+
+                <p class="price">
+                    🪙 100
+                </p>
+
+            </div>
+
+            <button class="buyBtn" data-item="magicKey">
+                BUY
+            </button>
+
+        </div>
+
+
+        <!-- Health Potion -->
+
+        <div class="shop-item">
+
+            <div class="item-icon">🧪</div>
+
+            <div class="item-info">
+
+                <h2>Health Potion</h2>
+
+                <p>
+                    Restores 1 heart.
+                </p>
+
+                <p class="price">
+                    🪙 10
+                </p>
+
+            </div>
+
+            <button class="buyBtn" data-item="healthPotion">
+                BUY
+            </button>
+
+        </div>
+
+
+        <!-- Mega Heart -->
+
+        <div class="shop-item">
+
+            <div class="item-icon">❤️</div>
+
+            <div class="item-info">
+
+                <h2>Mega Heart</h2>
+
+                <p>
+                    Restores 2 hearts.
+                </p>
+
+                <p class="price">
+                    🪙 15
+                </p>
+
+            </div>
+
+            <button class="buyBtn" data-item="megaHeart">
+                BUY
+            </button>
+
+        </div>
+
+
+        <button id="shopBackBtn" class="back">
+            ⬅ Back
+        </button>
+
+    </div>
+
+    </section>
+
+    <!-- ================================= -->
+    <!-- INVENTORY SCREEN                  -->
+    <!-- ================================= -->
+
+    <section id="inventoryScreen" class="screen">
+
+    <div class="shop-container inventory-container">
+
+        <h1>🎒 Inventory</h1>
+
+        <p class="shop-coins">
+            🪙 Coins: <span id="inventoryCoins">0</span>
+        </p>
+
+        <div id="inventoryItemsList"></div>
+
+        <p id="inventoryEmptyHint" class="inventory-empty-hint" hidden>
+            No items yet — visit the Shop to gear up!
+        </p>
+
+        <div id="inventoryPrizeBox" class="inventory-prize-box" hidden>
+
+            <p class="inventory-prize-label">
+                🏆 Congratulations! You have completed SciVenture
+            </p>
+
+            <button id="inventoryClaimPrizeBtn" class="prizeClaimBtn">
+                🎁 Claim Your Prize
+            </button>
+
+        </div>
+
+        <button id="inventoryBackBtn" class="backBtn">
+            ⬅ Back
+        </button>
+
+    </div>
+
+    </section>
+
+    <!-- ================================= -->
+    <!-- WORLD MAP                         -->
+    <!-- ================================= -->
+
+    <section id="mapScreen" class="screen">
+
+        <div class="map-content">
+
+            <h1>World Map</h1>
+
+            <img src="images/player-map.png"
+                 id="mapCharacter"
+                 alt="Explorer">
+
+            <!-- Kinetic Meadow -->
+
+            <button class="level-btn level1"
+                    id="levelBtn1"
+                    data-level="1">
+
+                <span>1</span>
+                🌿 Kinetic Meadow
+
+            </button>
+
+
+            <!-- Force Falls -->
+
+            <button class="level-btn level2 locked"
+                    id="levelBtn2"
+                    data-level="2">
+
+                <span>2</span>
+                💧 Force Falls <span class="lockIcon">🔒</span>
+
+            </button>
+
+
+            <!-- Momentum City -->
+
+            <button class="level-btn level3 locked"
+                    id="levelBtn3"
+                    data-level="3">
+
+                <span>3</span>
+                ⚡ Momentum City <span class="lockIcon">🔒</span>
+
+            </button>
+
+
+            <!-- Energy Volcano -->
+
+            <button class="level-btn level4 locked"
+                    id="levelBtn4"
+                    data-level="4">
+
+                <span>4</span>
+                🔥 Energy Volcano <span class="lockIcon">🔒</span>
+
+            </button>
+
+
+            <!-- Gravitas Kingdom -->
+
+            <button class="level-btn level5 locked"
+                    id="levelBtn5"
+                    data-level="5">
+
+                <span>5</span>
+                👑 Gravitas Kingdom <span class="lockIcon">🔒</span>
+
+            </button>
+
+
+            <button class="backBtn" id="mapBackBtn">
+                ⬅ MENU
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================= -->
+    <!-- GAME SCREEN                       -->
+    <!-- ================================= -->
+
+    <section id="gameScreen" class="screen">
+
+    <div class="game-content">
+
+        <div class="game-hud">
+
+            <button id="attackBtn">⚔️ ATTACK</button>
+
+            <span id="lives">
+                ❤️❤️❤️
+            </span>
+
+            <span id="coinCounter">
+                🪙 0
+            </span>
+
+            <span id="scoreCounter">
+                ⭐ 0
+            </span>
+
+            <span id="weaponDisplay">🗡️ No Sword</span>
+            <span id="shieldDisplay">🛡️ No Shield</span>
+            <span id="itemsDisplay">🔮 0 &nbsp; 🔑 0</span>
+
+            <button id="usePotionBtn" class="useItemBtn" title="Health Potion: restores 1 heart">
+                🧪 <span id="potionCount">0</span>
+            </button>
+
+            <button id="useMegaHeartBtn" class="useItemBtn" title="Mega Heart: restores 2 hearts">
+                ❤️ <span id="megaHeartCount">0</span>
+            </button>
+
+            <button id="leaveGameBtn">
+                🗺 MAP
+            </button>
+
+        </div>
+
+        <div id="levelStage">
+
+    <!-- SKY / CLOUD / MOUNTAIN BACKDROP (Mario-style, fixed to viewport) -->
+    <div id="cloudsLayer"></div>
+
+    <!-- LEVEL INTRODUCTION (shown every time a location is opened) -->
+    <div id="levelIntroOverlay">
+
+        <div id="levelIntroBox">
+
+            <h2 id="levelIntroTitle">
+                <span id="levelIntroIcon">🌿</span>
+                <span id="levelIntroName">Kinetic Meadow</span>
+            </h2>
+
+            <p id="levelIntroDetails">
+                A forest meadow.
+            </p>
+
+            <p id="levelIntroText">
+                Use ◀ ▶ to move and ⬆ to jump. Reach the wall and
+                answer a science question to break through. Avoid
+                monsters and pits — you only have 3 lives!
+            </p>
+
+            <button id="levelIntroStartBtn">
+                ▶ Start
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- SCROLLING WORLD (camera follows the player through this) -->
+    <div id="levelWorld">
+
+    <img
+        src="images/player-game.png"
+        id="gamePlayer"
+        alt="Explorer"
+    >
+        <div id="attackEffect">
+            <div id="attackArc"></div>
+            <div id="attackSword">
+                <div class="swordBlade"></div>
+                <div class="swordGuard"></div>
+                <div class="swordHilt"></div>
+            </div>
+        </div>
+
+    <!-- PLATFORMS (built per-level by script.js) -->
+    <div id="platformsLayer"></div>
+
+    <!-- SCENERY PROPS - trees, coral, lampposts, bones, etc, built
+         per-level (themed to each kingdom) by script.js -->
+    <div id="decorLayer"></div>
+
+    <!-- COINS (built per-level by script.js) -->
+    <div id="coinsLayer"></div>
+
+    <!-- MONSTERS (built per-level by script.js) -->
+    <div id="monstersLayer"></div>
+
+    <!-- PHYSICS WALLS (built per-level by script.js) -->
+    <div id="physicsWallsLayer"></div>
+
+<!-- LEVEL GOAL -->
+<div id="levelGoal">
+    🚩
+    <span id="levelGoalLabel">Finish</span>
+</div>
+
+<div id="groundLayer"></div>
+
+    </div>
+    <!-- /levelWorld -->
+
+    <!-- Toast telling the player to finish the remaining
+         questions before the Finish flag will count -->
+    <div id="goalLockedHint"></div>
+
+
+<!-- PHYSICS QUIZ -->
+<div id="quizOverlay">
+
+    <div id="quizBox">
+
+        <h2 id="quizTitle">⚡ Physics Challenge</h2>
+
+        <p id="quizTimer">⏱ 30</p>
+
+        <p id="questionText">
+            What is speed?
+        </p>
+
+        <div id="answerOptions">
+
+            <button class="answerBtn" data-answer="0">
+                A. Distance ÷ Time
+            </button>
+
+            <button class="answerBtn" data-answer="1">
+                B. Force × Mass
+            </button>
+
+            <button class="answerBtn" data-answer="2">
+                C. Mass ÷ Volume
+            </button>
+
+            <button class="answerBtn" data-answer="3">
+                D. Distance × Time
+            </button>
+
+        </div>
+
+        <div id="quizItems">
+
+            <button id="hintBtn" class="itemBtn">
+                🔮 Hint (<span id="hintCount">0</span>)
+            </button>
+
+            <button id="skipBtn" class="itemBtn">
+                🔑 Skip (<span id="skipCount">0</span>)
+            </button>
+
+        </div>
+
+        <p id="quizFeedback"></p>
+
+        <p id="quizExplanation"></p>
+
+        <button id="quizContinueBtn">
+            Continue ▶
+        </button>
+
+    </div>
+
+</div>
+
+    </div>
+
+    <!-- MOBILE TOUCH CONTROLS - only shown on touch devices
+         (see CSS media query); drives the same movement/jump
+         logic as the keyboard, see bindHoldButton()/tryJump()
+         in script.js -->
+    <div id="touchControls">
+
+        <div id="touchMoveGroup">
+            <button id="touchLeftBtn" aria-label="Move left">◀</button>
+            <button id="touchRightBtn" aria-label="Move right">▶</button>
+        </div>
+
+        <div id="touchActionGroup">
+            <button id="touchAttackBtn" aria-label="Attack">⚔️</button>
+            <button id="touchJumpBtn" aria-label="Jump">⤴ JUMP</button>
+        </div>
+
+    </div>
+
+    </div>
+
+    </section>
+
+
+    <!-- ================================= -->
+    <!-- ROTATE DEVICE PROMPT              -->
+    <!-- Shown instead of the gameplay screen on narrow/portrait -->
+    <!-- phones - see the "10.6 LANDSCAPE-ONLY GAMEPLAY" rule in -->
+    <!-- style.css. Must stay a sibling AFTER #gameScreen in the -->
+    <!-- DOM for that CSS selector to match.                    -->
+    <!-- ================================= -->
+
+    <div id="rotateDeviceOverlay">
+        <div class="rotateIcon">📱</div>
+        <h2>Rotate your device</h2>
+        <p>SciVenture plays best in landscape - turn your phone sideways to continue.</p>
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- ONLINE LEADERBOARD                -->
+    <!-- ================================= -->
+    <div id="leaderboardModal" class="leaderboard-modal" aria-hidden="true">
+        <div class="leaderboard-box">
+            <h2>🏆 SciVenture Leaderboard</h2>
+            <p id="leaderboardStatus">Leaderboard is offline until Firebase is connected.</p>
+            <div id="leaderboardList"></div>
+            <div class="leaderboard-actions">
+                <button id="leaderboardRefreshBtn">🔄 REFRESH</button>
+                <button id="leaderboardCloseBtn">✔ DONE</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- NAME ENTRY MODAL                  -->
+    <!-- ================================= -->
+
+    <div id="nameModal">
+
+        <div id="nameModalBox">
+
+            <h2>🏆 Who's Playing?</h2>
+
+            <p>
+                Enter your name, Explorer.
+            </p>
+
+            <input type="text"
+                   id="nameModalInput"
+                   maxlength="16"
+                   placeholder="Your name">
+
+            <p id="nameModalError"></p>
+
+            <button id="nameModalSaveBtn">✔ SAVE</button>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- LEVEL COMPLETE MODAL              -->
+    <!-- ================================= -->
+
+    <div id="levelCompleteModal">
+
+        <div id="levelCompleteModalBox">
+
+            <h2 id="levelCompleteTitle">💎 LOCATION COMPLETE!</h2>
+
+            <p id="levelCompleteBody"></p>
+
+            <div id="levelCompletePrizeBox" hidden>
+
+                <p id="levelCompletePrizeLabel">
+                    🏆 Congratulations! you have completed SciVenture
+                </p>
+
+                <a id="levelCompletePrizeBtn"
+                   class="prizeClaimBtn"
+                   href= "module.pdf"
+                   download="module.pdf"
+                   target="_blank"
+                   rel="noopener">
+                    🎁 Claim Your Prize
+                </a>
+
+            </div>
+
+            <div id="levelCompleteButtonRow">
+
+                <button id="levelCompleteMapBtn" class="levelCompleteBtn levelCompleteBtnSecondary">🗺 MAP</button>
+
+                <button id="levelCompleteRestartBtn" class="levelCompleteBtn levelCompleteBtnSecondary">↻ RESTART</button>
+
+                <button id="levelCompleteNextBtn" class="levelCompleteBtn levelCompleteBtnPrimary">▶ NEXT</button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- SETTINGS MODAL                    -->
+    <!-- ================================= -->
+
+    <div id="settingsModal">
+
+        <div id="settingsModalBox">
+
+            <h2>⚙ Settings</h2>
+
+            <div class="settingsRow">
+
+                <label for="musicVolumeSlider">
+                    🎵 Music Volume
+                </label>
+
+                <input type="range"
+                       id="musicVolumeSlider"
+                       min="0" max="100" value="50">
+
+            </div>
+
+            <div class="settingsRow settingsRowToggle">
+
+                <label for="musicMuteToggle">
+                    🔇 Mute Music
+                </label>
+
+                <input type="checkbox" id="musicMuteToggle">
+
+            </div>
+
+            <div class="settingsRow">
+
+                <label for="sfxVolumeSlider">
+                    🔊 Sound Effects
+                </label>
+
+                <input type="range"
+                       id="sfxVolumeSlider"
+                       min="0" max="100" value="60">
+
+            </div>
+
+            <div class="settingsRow settingsRowToggle">
+
+                <label for="sfxMuteToggle">
+                    🔇 Mute Sound Effects
+                </label>
+
+                <input type="checkbox" id="sfxMuteToggle">
+
+            </div>
+
+            <button id="resetProgressBtn">
+                🗑 Reset Game Progress
+            </button>
+
+            <button id="settingsCloseBtn">✔ DONE</button>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- JAVASCRIPT                        -->
+    <!-- ================================= -->
+
+    <script src="script.js"></script>
+    <script type="module" src="firebase-leaderboard.js"></script>
+
+</body>
+
+</html>
